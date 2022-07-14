@@ -21,10 +21,13 @@ create_engine("mysql+pymysql://root:Password0!@localhost:3306/")
 
 """
 
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine, MetaData, Table
 
 engine = create_engine("mysql+pymysql://root:Password0!@localhost:3306/storedb")
 
 meta = MetaData()
 
 conn = engine.connect()
+
+
+tablaClientes = Table("clientes", meta, autoload_with=engine)
