@@ -5,4 +5,10 @@ Created on Thu Jul 14 10:03:46 2022
 @author: Jerry H.
 """
 
-print("Hello Python venv, version 10.10.4")
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get('/')
+def hellouvicorn():
+    return "hello Uvicorn"
