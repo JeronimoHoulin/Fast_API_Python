@@ -6,9 +6,9 @@ Created on Thu Jul 14 10:03:46 2022
 """
 
 from fastapi import FastAPI
+from routes.cliente import cliente
 
 app = FastAPI()
 
-@app.get('/')
-def hellouvicorn():
-    return "hello Uvicorn"
+app.include_router(cliente)
+
