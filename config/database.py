@@ -9,18 +9,22 @@
 Test w/ mysql-connector library
 import mysql.connector
 
-mydb = mysql.connector.connect(host="localhost", user="jeronimo.houlin@gmail.com", password="Password0!")
+mydb = mysql.connector.connect(user='root', password='Password0!', port='3306',
+                              host='127.0.0.1', database='storedb')
 
-preefered with PyMySQL
+----0----
+
+prefered with PyMySQL
 from sqlalchemy import create_engine, MetaData
 
 create_engine("mysql+pymysql://root:Password0!@localhost:3306/")
 
 """
 
-import mysql.connector
+from sqlalchemy import create_engine, MetaData
 
-mydb = mysql.connector.connect(user='root', password='Password0!', port='3306',
-                              host='127.0.0.1', database='storedb')
+engine = create_engine("mysql+pymysql://root:Password0!@localhost:3306/storedb")
 
-print(mydb)
+meta = MetaData()
+
+conn = engine.connect()
