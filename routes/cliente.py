@@ -29,5 +29,5 @@ def createClientes(cliente: SchemaCliente):
     nuevo_cliente["contrasena"] = funcion_cifrar.encrypt(cliente.contrasena.encode("utf-8"))
     #print(nuevo_cliente) y ahora agregamos a la base de datos:
     respuesta = connection.execute(clientes.insert().values(nuevo_cliente))
-    return f"Respuesta del usuario en la base de datos: {nuevo_cliente}"
+    return f"Cliente agregado correctamente!"
 

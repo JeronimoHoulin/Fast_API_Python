@@ -28,5 +28,3 @@ engine = create_engine("mysql+pymysql://root:Password0!@localhost:3306/storedb")
 meta = MetaData()
 
 connection = engine.connect()
-
-tablaClientes = Table("clientes", meta, autoload_with=engine)
