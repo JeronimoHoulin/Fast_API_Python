@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from config.database import conn
+from config.database import connection
 from models.cliente import clientes
-from schemas.cliente import Cliente
+from schemas.cliente import SchemaCliente
 from cryptography.fernet import Fernet
 
 #Libreria para cifrar contrasenas
@@ -10,20 +10,24 @@ funcion_cifrar = Fernet(key)
 
 cliente = APIRouter()
 
+@cliente.get('/') 
+def index():
+    return "Hello Client!"
+
 #Al consultar por los usuarios, conectamos a la bd, y ejecutamos un "fetch_all" en sql... por ahora un array vacio:
 @cliente.get('/clientes') 
 def getClientes():
-    return conn.execute(clientes.select()).fetchall()
+    return connection.execute(clientes.select()).fetchall()
 
 
 #Post genera una entrada nueva:
 @cliente.post('/clientes') 
-def createClientes(cliente: Cliente):
-    nuevo_cliente = {"nombre": cliente.nombre, "apellido": cliente.apellido, "email": cliente.email}
-    #Sumar al objeto creado una contrasena cirfada
+def createClientes(cliente: SchemaCliente):
+    #convertir datos en diccionario que conlleve llave valor acorde al schema del cliente.
+    nuevo_cliente = cliente.dict()
+    #Quiero cifrar la contrasena que recibimos:
     nuevo_cliente["contrasena"] = funcion_cifrar.encrypt(cliente.contrasena.encode("utf-8"))
-    print(nuevo_cliente)
-    #un poco mas de sql para sumar el cliente como entrada nueva:
-    sumar_entrada = conn.execute(clientes.insert().values([nuevo_cliente]))
-    print(type(sumar_entrada))
-    return print(f"Respuesta del usuario en la base de datos: {sumar_entrada}")
+    #print(nuevo_cliente) y ahora agregamos a la base de datos:
+    respuesta = connection.execute(clientes.insert().values(nuevo_cliente))
+    return f"Respuesta del usuario en la base de datos: {nuevo_cliente}"
+
