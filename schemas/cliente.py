@@ -8,4 +8,4 @@ class SchemaCliente(BaseModel):
     email: str
     contrasena: str
 
-print("User schema correctly generated!")
+#print("User schema correctly generated!")
