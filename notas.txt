@@ -1,0 +1,10 @@
+Todas las tablas se registran en una base de datos llamada "storedb" en MySQL.
+
+
+Create clientes no requiere id.. autogenerado en la tabla MySQL.
+
+En cambio edit clientes si requiere que pasemos el id del cliente a editar. 
+
+
+Los movimientos requieren del id de la cuenta a la que quiere entrar / salir.
+Como si esta fuese el CBU de la cuenta. 

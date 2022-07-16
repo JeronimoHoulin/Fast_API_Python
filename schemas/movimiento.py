@@ -1,12 +1,12 @@
+from datetime import date
 from pydantic import BaseModel
 from typing import Optional
 
 class SchemaMovimiento(BaseModel):
     id: Optional[str]
     id_cuenta: int
-    id_cliente: int
     tipo: str
     importe: int
-    fecha: str
+    fecha: date
 
 #print("Schema de movimiento generado correctamente!")

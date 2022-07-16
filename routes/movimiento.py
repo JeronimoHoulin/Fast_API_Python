@@ -12,5 +12,6 @@ movimiento = APIRouter()
 @movimiento.post('/movimiento', tags=["Movimiento"], response_model=SchemaMovimiento) 
 def create_Movimiento(movimiento: SchemaMovimiento):
     nuevo_mov = movimiento.dict()
-    
+    respuesta = connection.execute(movimientos.insert().values(nuevo_mov))
+    print(respuesta)
     return nuevo_mov

@@ -8,6 +8,8 @@ Created on Thu Jul 14 10:03:46 2022
 from fastapi import FastAPI
 from routes.cliente import cliente
 from routes.movimiento import movimiento
+from routes.cuenta import cuenta
+
 
 app = FastAPI(
     title="Banza Challenge // Jerónimo H.",
@@ -16,4 +18,4 @@ app = FastAPI(
 
 app.include_router(cliente)
 app.include_router(movimiento)
-
+app.include_router(cuenta)
