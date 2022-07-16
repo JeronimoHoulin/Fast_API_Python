@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from config.database import connection
 from models.cliente import clientes
 from schemas.cliente import SchemaCliente
@@ -29,5 +29,7 @@ def createClientes(cliente: SchemaCliente):
     nuevo_cliente["contrasena"] = funcion_cifrar.encrypt(cliente.contrasena.encode("utf-8"))
     #print(nuevo_cliente) y ahora agregamos a la base de datos:
     respuesta = connection.execute(clientes.insert().values(nuevo_cliente))
-    return f"Cliente agregado correctamente!"
+    print(f"Cliente agregado correctamente con id: {respuesta.lastrowid}")
+    #devolvemos un comando de sql que tome el usuario en la db:
+    return connection.execute(clientes.select().where(clientes.c.id == respuesta.lastrowid)).first()
 

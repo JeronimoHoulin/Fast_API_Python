@@ -21,7 +21,7 @@ create_engine("mysql+pymysql://root:Password0!@localhost:3306/")
 
 """
 
-from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy import create_engine, MetaData
 
 engine = create_engine("mysql+pymysql://root:Password0!@localhost:3306/storedb")
 
