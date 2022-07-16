@@ -39,22 +39,22 @@ def create_Clientes(cliente: SchemaCliente):
 
 #Consulta de un usuario en particular:
 @cliente.get('/cliente/{id}', tags=["Clientes"], response_model=SchemaCliente)
-def get_Cliente(id:str):
+def get_Cliente(id:int):
     return connection.execute(clientes.select().where(clientes.c.id == id)).first()
 
 #Borrar de un usuario en particular:    //aca el response status lo dejo en srt.. aunque podriamos meter un codigo de estado https
 @cliente.delete('/cliente/{id}', tags=["Clientes"],)
-def del_Cliente(id:str):
+def del_Cliente(id:int):
     result = connection.execute(clientes.delete().where(clientes.c.id == id))
     return f"Cliente nro {id} fue eliminado correctamente!"
 
 #Editar un usuario en particular:
 @cliente.put('/cliente/{id}', tags=["Clientes"], response_model=SchemaCliente)
-def edit_Cliente(cliente: SchemaCliente):
+def edit_Cliente(id: int, cliente: SchemaCliente):
     #Dnvo genero el dict a actualizar en mysql:
     update_cliente = cliente.dict()
     update_cliente["contrasena"] = funcion_cifrar.encrypt(cliente.contrasena.encode("utf-8"))
 
-    connection.execute(clientes.update().values(update_cliente).where(clientes.c.id == cliente.id))
+    connection.execute(clientes.update().values(update_cliente).where(clientes.c.id == id))
     return f"Cliente nro {cliente.id} fue actualizado correctamente!"
 

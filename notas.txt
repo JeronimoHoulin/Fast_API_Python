@@ -8,3 +8,5 @@ En cambio edit clientes si requiere que pasemos el id del cliente a editar.
 
 Los movimientos requieren del id de la cuenta a la que quiere entrar / salir.
 Como si esta fuese el CBU de la cuenta. 
+
+Nota falta: editar consultar movimientos!

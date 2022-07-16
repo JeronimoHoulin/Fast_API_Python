@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class SchemaCliente(BaseModel):
-    id: Optional[str]
+    id: Optional[int]
     nombre: str
     apellido: str
     email: str

@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from typing import Optional
 
 class SchemaMovimiento(BaseModel):
-    id: Optional[str]
+    id: Optional[int]
     id_cuenta: int
     tipo: str
     importe: int
