@@ -43,7 +43,7 @@ def get_Cliente(id:int):
     return connection.execute(clientes.select().where(clientes.c.id == id)).first()
 
 #Borrar de un usuario en particular:    //aca el response status lo dejo en srt.. aunque podriamos meter un codigo de estado https
-@cliente.delete('/cliente/{id}', tags=["Clientes"],)
+@cliente.delete('/cliente/{id}', tags=["Clientes"])
 def del_Cliente(id:int):
     result = connection.execute(clientes.delete().where(clientes.c.id == id))
     return f"Cliente nro {id} fue eliminado correctamente!"

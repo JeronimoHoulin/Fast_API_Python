@@ -54,5 +54,6 @@ def get_Cuenta(id: int):
             cambio += float(ele["casa"]["venta"].replace(",", "."))
 
     print(cambio)
-    
+    respuesta["USD"] = (ingresos - egresos)/cambio
+
     return respuesta
