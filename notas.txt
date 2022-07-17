@@ -10,3 +10,6 @@ Los movimientos requieren del id de la cuenta a la que quiere entrar / salir.
 Como si esta fuese el CBU de la cuenta. 
 
 Nota falta: editar consultar movimientos!
+
+Los movimientos se una cuenta se podran consultar por id de la cuenta, devuelve
+el saldo actual y el historial de todos los movimientos.

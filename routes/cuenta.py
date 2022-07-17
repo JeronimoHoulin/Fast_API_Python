@@ -36,6 +36,10 @@ def get_Cuenta(id: int):
     print("----------------")
     print(f"Saldo: {ingresos - egresos}")
 
+    respuesta = {}
+    respuesta["SaldoActual"] = ingresos - egresos
+    respuesta["Historial"] = historial
+
     ############################################ FETCH DOLAR MEP A LA API DE DOLAR SI
 
     r = requests.get('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
@@ -51,4 +55,4 @@ def get_Cuenta(id: int):
 
     print(cambio)
     
-    return "Grcs por tu pedido!"
+    return respuesta

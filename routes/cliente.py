@@ -26,7 +26,7 @@ def get_Clientes():
 
 #Post genera una entrada nueva:
 @cliente.post('/clientes', tags=["Clientes"], response_model=SchemaCliente) 
-def create_Clientes(cliente: SchemaCliente):
+def create_Cliente(cliente: SchemaCliente):
     #convertir datos en diccionario que conlleve llave valor acorde al schema del cliente.
     nuevo_cliente = cliente.dict()
     #Quiero cifrar la contrasena que recibimos:
