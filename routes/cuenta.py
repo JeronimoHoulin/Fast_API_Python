@@ -1,12 +1,12 @@
-import sqlalchemy as db
+from sqlalchemy.sql import func
 from fastapi import APIRouter
 from config.database import connection
 from models.cuenta import cuentas
 from models.cliente import clientes
 from models.movimiento import movimientos
 
-
-#Importo movimientos para sumar a la debida cuenta.
+#For api and data manipulation
+import requests
 
 cuenta = APIRouter()
 
@@ -18,9 +18,37 @@ cuenta = APIRouter()
 def get_Cuenta(id: int):
     dueno = connection.execute(clientes.select().where(clientes.c.id == id)).first()
     historial = connection.execute(movimientos.select().where(movimientos.c.id_cuenta == id)).fetchall()
-    print(dueno)
+
+    ingresos = 0
+    egresos = 0
+    for row in historial:
+        #print(row["tipo"])
+        if row["tipo"] == "ingreso":
+            ingresos += row["importe"]
+        if row["tipo"] == "egreso":
+            egresos += row["importe"]
+        else:
+            pass
+    print(f"Movimientos de cliente nro {id}:")
+    print("--------0--------")
+    print(f"ingresos netos: {ingresos}")
+    print(f"egresos netos: {egresos}")
     print("----------------")
-    print(historial)
-    sum_ingresos = 0
-    print(sum_ingresos)
-    return "helloooooo"
+    print(f"Saldo: {ingresos - egresos}")
+
+    ############################################ FETCH DOLAR MEP A LA API DE DOLAR SI
+
+    r = requests.get('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
+    response = r.json()
+    #print(response)
+
+    cambio = 0
+
+    for ele in response:
+        #print(ele['casa']["nombre"])
+        if ele["casa"]["nombre"] == "Dolar Bolsa":
+            cambio += float(ele["casa"]["venta"].replace(",", "."))
+
+    print(cambio)
+    
+    return "Grcs por tu pedido!"
