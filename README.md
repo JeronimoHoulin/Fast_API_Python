@@ -11,4 +11,6 @@ Con el paquete de SQL Alchemy podrán conectarse estas peticiones del cliente co
 
 * **Para conetar la applicación con tu propia base MySQL deberás renombrar el archivo ".envSAMPLE" a ".env" y proporcionar tu usuario y contraseña (si no tienes un nombre de usuario espec[ifico el default es "root")**
 
+La base de datos que se generará se llama "storedb", podrás verla con el comando "show databases;" desde la terminal de MySQL.
+
 Toda la documentación está explícita en el endpoint: "localhost:8000/docs".

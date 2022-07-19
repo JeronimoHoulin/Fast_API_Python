@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Response
 from config.database import connection
 from models.movimiento import movimientos
+from models.cuenta import cuentas
 from schemas.movimiento import SchemaMovimiento
+
+import requests
 
 from datetime import date
 
@@ -15,16 +18,31 @@ movimiento = APIRouter()
 def create_Movimiento(movimiento: SchemaMovimiento):
     nuevo_mov = movimiento.dict()
     #print(nuevo_mov["importe"])
-    ##################################### Validación de el tipo de movimiento:
 
+    id_cliente = nuevo_mov["id_cuenta"]
+
+    r = requests.get(f'http://localhost:8000/cuenta/{id_cliente}')
+    response = r.json()
+    saldo = response["SaldoActual"]
+
+    ##################################### Validación de el tipo de movimiento:
     if nuevo_mov["fecha"] > date.today():
         nuevo_mov = {}
-        nuevo_mov["error"] = "El campo de FECHA no puede estar en el futuro!"
+        nuevo_mov["error"] = "El campo de FECHA no se puede programar en el futuro!"
 
     elif nuevo_mov["importe"] < 0:
         nuevo_mov = {}
         nuevo_mov["error"] = "El campo de IMPORTE tiene que ser positivo!"
 
+    ##################################### Validación de fondos para egresos:
+    elif nuevo_mov["tipo"] == "egreso":
+        if nuevo_mov["importe"] > saldo:
+            nuevo_mov = {}
+            nuevo_mov["error"] = "Egreso no valido, fondos insuficientes!"
+        else:
+            pass
+
+    ##################################### Si todo pasa.. registro el egreso:
     else:
         respuesta = connection.execute(movimientos.insert().values(nuevo_mov))
 
