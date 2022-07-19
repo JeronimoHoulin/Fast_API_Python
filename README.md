@@ -1,5 +1,5 @@
 # Banza-Challenge
-Examen técnico.
+### Examen técnico.
 
 Este repositorio contiene una API REST escrita en Python 3.
 
@@ -13,7 +13,6 @@ Con el paquete de SQL Alchemy podrán conectarse estas peticiones del cliente
 con nuestra base de datos relacionales (MySQL) y ejecutar ordenes de tipo
 put, get, post y delete. 
 
-# PARA CONECTAR LA APPLICACIÓN CON TU MYSQL DEBERÁS PROPORCIONAR TU USUARIO Y CONTRASEÑA
-# EN EL ARCHIVO .ENV
+## PARA CONECTAR LA APPLICACIÓN CON TU MYSQL DEBERÁS PROPORCIONAR TU USUARIO Y CONTRASEÑA EN EL ARCHIVO .ENV
 
 Toda la documentación está explícita en el endpoint: "localhost:8000/docs".
