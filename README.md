@@ -9,6 +9,6 @@ Uvicorn corre el cliente localmente desde el "localhost:8000" utilizando el coma
 
 Con el paquete de SQL Alchemy podrán conectarse estas peticiones del cliente con nuestra base de datos relacionales (MySQL) y ejecutar ordenes de tipo put, get, post y delete. 
 
-**PARA CONECTAR LA APPLICACIÓN CON TU MYSQL DEBERÁS PROPORCIONAR TU USUARIO Y CONTRASEÑA EN EL ARCHIVO .ENV**
+* **Para conetar la applicación con tu propia base MySQL deberás proporcionar tu usuario y contraseña en el archivo .ENV**
 
 Toda la documentación está explícita en el endpoint: "localhost:8000/docs".
