@@ -53,7 +53,7 @@ def get_Cuenta(id: int):
         if ele["casa"]["nombre"] == "Dolar Bolsa":
             cambio += float(ele["casa"]["venta"].replace(",", "."))
 
-    print(cambio)
+    #print(cambio)
     respuesta["USD"] = (ingresos - egresos)/cambio
 
     return respuesta

@@ -14,11 +14,10 @@ movimiento = APIRouter()
 """Rutas de Movimientos"""
 ##################################################################################################################
 
-@movimiento.post('/movimiento', tags=["Movimientos"]) 
-def create_Movimiento(movimiento: SchemaMovimiento):
+@movimiento.post('/movimiento/{id}', tags=["Movimientos"]) 
+def create_Movimiento(id:int, movimiento: SchemaMovimiento):
     nuevo_mov = movimiento.dict()
-    #print(nuevo_mov["importe"])
-
+    nuevo_mov["id_cuenta"] = id
     id_cliente = nuevo_mov["id_cuenta"]
 
     r = requests.get(f'http://localhost:8000/cuenta/{id_cliente}')
@@ -38,14 +37,14 @@ def create_Movimiento(movimiento: SchemaMovimiento):
     elif nuevo_mov["tipo"] == "egreso":
         if nuevo_mov["importe"] > saldo:
             nuevo_mov = {}
-            nuevo_mov["error"] = "Egreso no valido, fondos insuficientes!"
+            nuevo_mov["error"] = "Egreso rechazado; fondos insuficientes!"
         else:
             pass
 
     ##################################### Si todo pasa.. registro el egreso:
     else:
         respuesta = connection.execute(movimientos.insert().values(nuevo_mov))
-
+        print('Egresarán '+ str(nuevo_mov["importe"]) + ' pesos.')
     return nuevo_mov
 
 
