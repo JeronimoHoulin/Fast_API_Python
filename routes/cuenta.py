@@ -2,6 +2,7 @@ from sqlalchemy.sql import func
 from fastapi import APIRouter
 from config.database import connection
 from models.cuenta import cuentas
+from schemas.cuenta import SchemaCuenta
 from models.cliente import clientes
 from models.movimiento import movimientos
 
@@ -13,8 +14,20 @@ cuenta = APIRouter()
 ##################################################################################################################
 """Rutas de Cuentas"""
 ##################################################################################################################
+@cuenta.get('/cuentas', tags=["Cuentas"], response_model=list[SchemaCuenta]) 
+def get_Cuentas():
+    return connection.execute(cuentas.select()).fetchall()
 
-@cuenta.get('/cuenta/{id}', tags=["Cuentas"])
+#Post genera una cuenta nueva:
+@cuenta.post('/cuentas', tags=["Clientes"], response_model=SchemaCuenta) 
+def create_Cuenta(cuenta: SchemaCuenta):
+    nueva_cuenta = cuenta.dict()
+    respuesta = connection.execute(cuentas.insert().values(nueva_cuenta))
+    print(f"Cuenta agregado correctamente con id: {respuesta.lastrowid}")
+    return connection.execute(cuentas.select().where(cuentas.c.id == respuesta.lastrowid)).first()
+
+
+@cuenta.get('/cuentas/{id}', tags=["Cuentas"])
 def get_Cuenta(id: int):
     dueno = connection.execute(clientes.select().where(clientes.c.id == id)).first()
     historial = connection.execute(movimientos.select().where(movimientos.c.id_cuenta == id)).fetchall()
@@ -40,11 +53,29 @@ def get_Cuenta(id: int):
     respuesta["SaldoActual"] = ingresos - egresos
     respuesta["Historial"] = historial
 
-    ############################################ FETCH DOLAR MEP A LA API DE DOLAR SI
+    return respuesta
 
+
+@cuenta.get('/cuentas/{id}/usd', tags=["Cuentas"])
+def get_Cuenta_USD(id: int):
+    historial = connection.execute(movimientos.select().where(movimientos.c.id_cuenta == id)).fetchall()
+
+    ingresos = 0
+    egresos = 0
+    for row in historial:
+        #print(row["tipo"])
+        if row["tipo"] == "ingreso":
+            ingresos += row["importe"]
+        if row["tipo"] == "egreso":
+            egresos += row["importe"]
+        else:
+            pass
+
+    respuesta = {}
+
+    ############################################ FETCH DOLAR MEP A LA API DE DOLAR SI
     r = requests.get('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
     response = r.json()
-    #print(response)
 
     cambio = 0
 
@@ -54,6 +85,6 @@ def get_Cuenta(id: int):
             cambio += float(ele["casa"]["venta"].replace(",", "."))
 
     #print(cambio)
-    respuesta["USD"] = (ingresos - egresos)/cambio
+    respuesta["Saldo_USD"] = (ingresos - egresos)/cambio
 
     return respuesta

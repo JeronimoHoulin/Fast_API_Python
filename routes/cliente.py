@@ -49,12 +49,14 @@ def del_Cliente(id:int):
     return f"Cliente nro {id} fue eliminado correctamente!"
 
 #Editar un usuario en particular:
-@cliente.put('/cliente/{id}', tags=["Clientes"], response_model=SchemaCliente)
+@cliente.put('/cliente/{id}', tags=["Clientes"])
 def edit_Cliente(id: int, cliente: SchemaCliente):
     #Dnvo genero el dict a actualizar en mysql:
     update_cliente = cliente.dict()
+    update_cliente["id"] = id
+    print(update_cliente)
     update_cliente["contrasena"] = funcion_cifrar.encrypt(cliente.contrasena.encode("utf-8"))
 
     connection.execute(clientes.update().values(update_cliente).where(clientes.c.id == id))
-    return f"Cliente nro {cliente.id} fue actualizado correctamente!"
+    return f"Cliente nro {id} fue actualizado correctamente!"
 

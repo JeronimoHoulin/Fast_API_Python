@@ -17,4 +17,4 @@ Toda la documentación está explícita en el endpoint: "localhost:8000/docs", e
 
 Unicamente los endponts que terminan en "{id}" requieren ingresar el id del cliente, no es necesario ingresar el campo "id" para los demas ya que se genera automaticamente en la base de datos relacional con la función Increment.
 
-Notar la diferencia entre el Schema de un movimiento y el Modelo del mismo donde el primero refiere a la estructura que debe ingresar el cliente y el segundo la que se registra en la base de datos. 
+Notar la diferencia entre el Schema de un movimiento y el Modelo del mismo donde el primero refiere a la estructura que debe ingresar el cliente y el segundo la que se registra en la base de datos. Al crear un nuevo movimiento se requiere el id del usuario en cuestion, y el id_cuenta almacenará este valor mientas que le id del movimiento se genera con la funcion Increment de MySQL. 

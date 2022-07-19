@@ -1,4 +1,4 @@
-from sqlalchemy import Table, Column, Integer
+from sqlalchemy import String, Table, Column, Integer
 from sqlalchemy.sql.sqltypes import Integer
 from config.database import meta, engine
 
@@ -6,7 +6,8 @@ from config.database import meta, engine
 
 cuentas = Table("cuentas", meta, 
     Column('id', Integer, primary_key=True),
-    Column('id_cliente', Integer, nullable = False)
+    Column('id_cliente', Integer, nullable = False),
+    Column('categoria', String(225), nullable = False)
     )
     
 meta.create_all(engine)

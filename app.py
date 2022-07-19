@@ -17,5 +17,5 @@ app = FastAPI(
 )
 
 app.include_router(cliente)
-app.include_router(movimiento)
 app.include_router(cuenta)
+app.include_router(movimiento)
