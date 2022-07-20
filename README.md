@@ -15,7 +15,7 @@ Con el paquete de SQL Alchemy podrán conectarse estas peticiones del cliente co
 
 La base de datos que se generará se llama "storedb", podrás verla con el comando "SHOW databases;" desde MySQL (CLI ó GUI).
 
-Toda la documentación está explícita en: "localhost:8000/docs", en donde se implementaron los tests para validar todos los endpoints.
+Toda la documentación está explícita en: "localhost:8000/docs", en donde se implementaron los tests para validar todos los endpoints. Debajo un video demostrando las primeras trés acciones que deben crearse para generar Usuarios, Cuentas y movimientos:
 
 https://user-images.githubusercontent.com/79488175/180074800-e5bb473a-fe94-49cd-8ca5-bdf5f64f3694.mp4
 
