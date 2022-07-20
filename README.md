@@ -17,7 +17,7 @@ La base de datos que se generará se llama "storedb", podrás verla con el coman
 
 Toda la documentación está explícita en: "localhost:8000/docs", en donde se implementaron los tests para validar todos los endpoints.
 
-
+https://user-images.githubusercontent.com/79488175/180074800-e5bb473a-fe94-49cd-8ca5-bdf5f64f3694.mp4
 
 La applicación está organizada de la siguiente manera:
 *Crear un usuario,
