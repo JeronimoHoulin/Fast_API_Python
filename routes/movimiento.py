@@ -14,37 +14,57 @@ movimiento = APIRouter()
 """Rutas de Movimientos"""
 ##################################################################################################################
 
-@movimiento.post('/movimiento/{id}', tags=["Movimientos"]) 
-def create_Movimiento(id:int, movimiento: SchemaMovimiento):
+@movimiento.post('/movimiento/{id}/{categ}', tags=["Movimientos"]) 
+def create_Movimiento(id:int, categ:str, movimiento: SchemaMovimiento):
     nuevo_mov = movimiento.dict()
-    nuevo_mov["id_cuenta"] = id
-    id_cliente = nuevo_mov["id_cuenta"]
+    nuevo_mov["id_cliente"] = id
+    nuevo_mov["categoria"] = categ
+    id_cliente = nuevo_mov["id_cliente"]
 
-    r = requests.get(f'http://localhost:8000/cuenta/{id_cliente}')
-    response = r.json()
-    saldo = response["SaldoActual"]
+    #valido que tenga categoria:
+    r = requests.get(f'http://localhost:8000/cuentas/{id_cliente}')
+    resp = r.json()
 
-    ##################################### Validación de el tipo de movimiento:
-    if nuevo_mov["fecha"] > date.today():
-        nuevo_mov = {}
-        nuevo_mov["error"] = "El campo de FECHA no se puede programar en el futuro!"
+    clients_categs = []
 
-    elif nuevo_mov["importe"] < 0:
-        nuevo_mov = {}
-        nuevo_mov["error"] = "El campo de IMPORTE tiene que ser positivo!"
+    for row in resp:
+        if row["categoria"] not in clients_categs:
+            clients_categs += row["categoria"]
 
-    ##################################### Validación de fondos para egresos:
-    elif nuevo_mov["tipo"] == "egreso":
-        if nuevo_mov["importe"] > saldo:
+    if categ in clients_categs:
+
+        #valido que tenga saldo:
+        r = requests.get(f'http://localhost:8000/cuenta/{id_cliente}')
+        response = r.json()
+
+        saldo = int(response["SaldoActual"])
+
+        ##################################### Validación de el tipo de movimiento:
+        if nuevo_mov["fecha"] > date.today():
             nuevo_mov = {}
-            nuevo_mov["error"] = "Egreso rechazado; fondos insuficientes!"
-        else:
-            pass
+            nuevo_mov["error"] = "El campo de FECHA no se puede programar en el futuro!"
 
-    ##################################### Si todo pasa.. registro el egreso:
+        elif nuevo_mov["importe"] < 0:
+            nuevo_mov = {}
+            nuevo_mov["error"] = "El campo de IMPORTE tiene que ser positivo!"
+
+        ##################################### Validación de fondos para egresos:
+        elif nuevo_mov["tipo"] == "egreso":
+            if nuevo_mov["importe"] > saldo:
+                nuevo_mov = {}
+                nuevo_mov["error"] = "Egreso rechazado; fondos insuficientes!"
+            else:
+                pass
+
+        ##################################### Si todo pasa.. registro el egreso:
+        else:
+            respuesta = connection.execute(movimientos.insert().values(nuevo_mov))
+            print('Importe sera de: '+ str(nuevo_mov["importe"]) + ' pesos.')
+
     else:
-        respuesta = connection.execute(movimientos.insert().values(nuevo_mov))
-        print('Egresarán '+ str(nuevo_mov["importe"]) + ' pesos.')
+        nuevo_mov = {}
+        nuevo_mov["error"] = f"Cliente no tiene cuenta de tipo {categ}!"
+        
     return nuevo_mov
 
 

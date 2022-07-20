@@ -18,19 +18,38 @@ cuenta = APIRouter()
 def get_Cuentas():
     return connection.execute(cuentas.select()).fetchall()
 
+@cuenta.get('/cuentas/{id}', tags=["Cuentas"], response_model=list[SchemaCuenta])
+def get_Cuentas_cliente(id:int):
+    return connection.execute(cuentas.select().where(cuentas.c.id_cliente == id)).fetchall()
+
 #Post genera una cuenta nueva:
-@cuenta.post('/cuentas', tags=["Clientes"], response_model=SchemaCuenta) 
+@cuenta.post('/cuentas', tags=["Cuentas"]) 
 def create_Cuenta(cuenta: SchemaCuenta):
     nueva_cuenta = cuenta.dict()
-    respuesta = connection.execute(cuentas.insert().values(nueva_cuenta))
-    print(f"Cuenta agregado correctamente con id: {respuesta.lastrowid}")
-    return connection.execute(cuentas.select().where(cuentas.c.id == respuesta.lastrowid)).first()
+    #Validacion de categoria existente:
+    id_cliente = nueva_cuenta['id_cliente']
+    categ = nueva_cuenta['categoria']
+
+    r = requests.get(f'http://localhost:8000/cuentas/{id_cliente}')
+    response = r.json()
+    result = {}
+
+    for row in response:
+        if categ == row["categoria"]:
+            result['error'] = f"El cliente ya tiene una cta con categoria {categ}"
+        else:
+            pass
+    if 'error' not in result.keys():
+        respuesta = connection.execute(cuentas.insert().values(nueva_cuenta))
+        result["sucess"] = f"Cuenta agregada correctamente!"
+
+    return result
 
 
-@cuenta.get('/cuentas/{id}', tags=["Cuentas"])
+@cuenta.get('/cuenta/{id}', tags=["Cuentas"])
 def get_Cuenta(id: int):
     dueno = connection.execute(clientes.select().where(clientes.c.id == id)).first()
-    historial = connection.execute(movimientos.select().where(movimientos.c.id_cuenta == id)).fetchall()
+    historial = connection.execute(movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
 
     ingresos = 0
     egresos = 0
@@ -56,9 +75,9 @@ def get_Cuenta(id: int):
     return respuesta
 
 
-@cuenta.get('/cuentas/{id}/usd', tags=["Cuentas"])
+@cuenta.get('/cuenta/{id}/usd', tags=["Cuentas"])
 def get_Cuenta_USD(id: int):
-    historial = connection.execute(movimientos.select().where(movimientos.c.id_cuenta == id)).fetchall()
+    historial = connection.execute(movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
 
     ingresos = 0
     egresos = 0

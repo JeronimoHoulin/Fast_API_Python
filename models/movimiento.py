@@ -6,7 +6,8 @@ from config.database import meta, engine
 
 movimientos = Table("movimientos", meta, 
     Column('id', Integer, primary_key=True),
-    Column("id_cuenta", Integer, nullable=False),
+    Column("id_cliente", Integer, nullable=False),
+    Column("categoria", String(225), nullable=False),
     Column("tipo", String(225), nullable=False), 
     Column("importe", Integer, nullable=False), 
     Column("fecha", Date, nullable=False))

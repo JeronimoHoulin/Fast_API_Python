@@ -1,8 +1,9 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class SchemaCuenta(BaseModel):
-    id: int
+    id: Optional[int]
     id_cliente: int
     categoria: str
 
-#print("User schema correctly generated!")
+#print("Cuenta schema correctly generated!")
