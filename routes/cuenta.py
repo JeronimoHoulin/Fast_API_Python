@@ -6,27 +6,33 @@ from schemas.cuenta import SchemaCuenta
 from models.cliente import clientes
 from models.movimiento import movimientos
 
-#For api and data manipulation
+# For api and data manipulation
 import requests
 
 cuenta = APIRouter()
 
 ##################################################################################################################
 """Rutas de Cuentas"""
+
+
 ##################################################################################################################
-@cuenta.get('/cuentas', tags=["Cuentas"], response_model=list[SchemaCuenta]) 
+@cuenta.get('/cuentas', tags=["Cuentas"], response_model=list[SchemaCuenta])
 def get_Cuentas():
     return connection.execute(cuentas.select()).fetchall()
 
-@cuenta.get('/cuentas/{id}', tags=["Cuentas"], response_model=list[SchemaCuenta])
-def get_Cuentas_cliente(id:int):
-    return connection.execute(cuentas.select().where(cuentas.c.id_cliente == id)).fetchall()
 
-#Post genera una cuenta nueva:
-@cuenta.post('/cuentas', tags=["Cuentas"]) 
+@cuenta.get('/cuentas/{id}', tags=["Cuentas"],
+            response_model=list[SchemaCuenta])
+def get_Cuentas_cliente(id: int):
+    return connection.execute(
+        cuentas.select().where(cuentas.c.id_cliente == id)).fetchall()
+
+
+# Post genera una cuenta nueva:
+@cuenta.post('/cuentas', tags=["Cuentas"])
 def create_Cuenta(cuenta: SchemaCuenta):
     nueva_cuenta = cuenta.dict()
-    #Validacion de categoria existente:
+    # Validacion de categoria existente:
     id_cliente = nueva_cuenta['id_cliente']
     categ = nueva_cuenta['categoria']
 
@@ -36,7 +42,8 @@ def create_Cuenta(cuenta: SchemaCuenta):
 
     for row in response:
         if categ == row["categoria"]:
-            result['error'] = f"El cliente ya tiene una cta con categoria {categ}"
+            result[
+                'error'] = f"El cliente ya tiene una cta con categoria {categ}"
         else:
             pass
     if 'error' not in result.keys():
@@ -48,13 +55,15 @@ def create_Cuenta(cuenta: SchemaCuenta):
 
 @cuenta.get('/cuenta/{id}', tags=["Cuentas"])
 def get_Cuenta(id: int):
-    dueno = connection.execute(clientes.select().where(clientes.c.id == id)).first()
-    historial = connection.execute(movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
+    dueno = connection.execute(
+        clientes.select().where(clientes.c.id == id)).first()
+    historial = connection.execute(
+        movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
 
     ingresos = 0
     egresos = 0
     for row in historial:
-        #print(row["tipo"])
+        # print(row["tipo"])
         if row["tipo"] == "ingreso":
             ingresos += row["importe"]
         if row["tipo"] == "egreso":
@@ -77,12 +86,13 @@ def get_Cuenta(id: int):
 
 @cuenta.get('/cuenta/{id}/get_total_usd', tags=["Cuentas"])
 def get_Cuenta_USD(id: int):
-    historial = connection.execute(movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
+    historial = connection.execute(
+        movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
 
     ingresos = 0
     egresos = 0
     for row in historial:
-        #print(row["tipo"])
+        # print(row["tipo"])
         if row["tipo"] == "ingreso":
             ingresos += row["importe"]
         if row["tipo"] == "egreso":
@@ -93,17 +103,18 @@ def get_Cuenta_USD(id: int):
     respuesta = {}
 
     ############################################ FETCH DOLAR MEP A LA API DE DOLAR SI
-    r = requests.get('https://www.dolarsi.com/api/api.php?type=valoresprincipales')
+    r = requests.get(
+        'https://www.dolarsi.com/api/api.php?type=valoresprincipales')
     response = r.json()
 
     cambio = 0
 
     for ele in response:
-        #print(ele['casa']["nombre"])
+        # print(ele['casa']["nombre"])
         if ele["casa"]["nombre"] == "Dolar Bolsa":
             cambio += float(ele["casa"]["venta"].replace(",", "."))
 
-    #print(cambio)
-    respuesta["Saldo_USD"] = (ingresos - egresos)/cambio
+    # print(cambio)
+    respuesta["Saldo_USD"] = (ingresos - egresos) / cambio
 
     return respuesta

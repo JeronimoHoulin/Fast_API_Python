@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
+
 class SchemaCliente(BaseModel):
     id: Optional[int]
     nombre: str
@@ -8,4 +9,4 @@ class SchemaCliente(BaseModel):
     email: str
     contrasena: str
 
-#print("User schema correctly generated!")
+# print("User schema correctly generated!")

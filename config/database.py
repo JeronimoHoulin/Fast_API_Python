@@ -23,8 +23,9 @@ create_engine("mysql+pymysql://root:Password0!@localhost:3306/")
 """
 
 import os
-
 from dotenv import load_dotenv, find_dotenv
+from sqlalchemy import create_engine, MetaData
+
 load_dotenv(find_dotenv())
 
 print('Connected to Username: ' + os.getenv('USUARIO_MYSQL'))
@@ -32,9 +33,8 @@ print('Connected to Username: ' + os.getenv('USUARIO_MYSQL'))
 username = os.getenv('USUARIO_MYSQL')
 password = os.getenv('CONTRASENA_MYSQL')
 
-from sqlalchemy import create_engine, MetaData
-
-engine = create_engine(f"mysql+pymysql://{username}:{password}@localhost:3306/storedb")
+engine = create_engine(
+    f"mysql+pymysql://{username}:{password}@localhost:3306/storedb")
 
 meta = MetaData()
 
