@@ -29,10 +29,9 @@ def create_Movimiento(id:int, categ:str, movimiento: SchemaMovimiento):
 
     for row in resp:
         if row["categoria"] not in clients_categs:
-            clients_categs += row["categoria"]
-
+            clients_categs.append(row["categoria"])
+    print(clients_categs)
     if categ in clients_categs:
-
         #valido que tenga saldo:
         r = requests.get(f'http://localhost:8000/cuenta/{id_cliente}')
         response = r.json()

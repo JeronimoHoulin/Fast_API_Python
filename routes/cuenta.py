@@ -21,13 +21,6 @@ def get_Cuentas():
     return connection.execute(cuentas.select()).fetchall()
 
 
-@cuenta.get('/cuentas/{id}', tags=["Cuentas"],
-            response_model=list[SchemaCuenta])
-def get_Cuentas_cliente(id: int):
-    return connection.execute(
-        cuentas.select().where(cuentas.c.id_cliente == id)).fetchall()
-
-
 # Post genera una cuenta nueva:
 @cuenta.post('/cuentas', tags=["Cuentas"])
 def create_Cuenta(cuenta: SchemaCuenta):
@@ -51,6 +44,44 @@ def create_Cuenta(cuenta: SchemaCuenta):
         result["sucess"] = f"Cuenta agregada correctamente!"
 
     return result
+
+
+# Borrar de un usuario en particular:    //aca el response status lo dejo en srt.. aunque podriamos meter un codigo de estado https
+@cuenta.delete('/cuenta/{id}', tags=["Cuentas"])
+def del_Cuenta(id: int):
+    #valido que el usuario tenga otras cuentas:
+    r = requests.get(f'http://localhost:8000/cuentas/{id}')
+    response = r.json()
+
+    if len(response) == 0:
+        result = {}
+        result["error"] = f"El cliente no tiene cuenta con id: {id}. Creá una cuenta!"
+
+    #Si tiene solo una cuenta deberá retirar sus fondos:
+    elif len(response) == 1:
+        #print("solo tiene una cta")
+        for row in response:
+            cliente = row["id_cliente"]
+            categ = row["categoria"]
+        result = {}
+        result["error"] = f"El cliente {cliente} tiene una sola cuenta. Deberá retirar sus fondos de su cuenta {categ} con id: {id}"
+
+    elif len(response) > 1: 
+        for row in response:
+            cliente = row["id_cliente"]
+            categ = row["categoria"]
+        result = {}
+        result["sucess"] = f"El cliente {cliente} deberá retirar sus fondos de su cuenta con id: {id} hacia una cuenta de otra categoría!"
+        result["cta_eliminada"] = connection.execute(cuentas.delete().where(cuentas.c.id == id))
+
+    return result
+    
+
+@cuenta.get('/cuentas/{id}', tags=["Cuentas"],
+            response_model=list[SchemaCuenta])
+def get_Cuentas_cliente(id: int):
+    return connection.execute(
+        cuentas.select().where(cuentas.c.id_cliente == id)).fetchall()
 
 
 @cuenta.get('/cuenta/{id}', tags=["Cuentas"])
