@@ -75,7 +75,7 @@ def get_Cuenta(id: int):
     return respuesta
 
 
-@cuenta.get('/cuenta/{id}/usd', tags=["Cuentas"])
+@cuenta.get('/cuenta/{id}/get_total_usd', tags=["Cuentas"])
 def get_Cuenta_USD(id: int):
     historial = connection.execute(movimientos.select().where(movimientos.c.id_cliente == id)).fetchall()
 

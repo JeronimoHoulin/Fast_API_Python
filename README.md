@@ -20,3 +20,5 @@ Toda la documentación está explícita en el endpoint: "localhost:8000/docs", e
 Unicamente los endponts que terminan en "{id}" requieren ingresar el id del cliente, no es necesario ingresar el campo "id" para los demas ya que se genera automaticamente en la base de datos relacional con la función Increment.
 
 Notar la diferencia entre el Schema de un movimiento y el Modelo del mismo donde el primero refiere a la estructura que debe ingresar el cliente y el segundo la que se registra en la base de datos. Al crear un nuevo movimiento se requiere el id del usuario en cuestion, y el nombre de la categoria de la cuenta, MySQL almacenará este valor en su respectiva cuenta mientas que le id del movimiento se genera con la funcion Increment de MySQL.
+
+Finalmente se debe apreciar que cada cliente puede tener diferentes cuentas, y estas se dividen en sus respectivas "categorias" pero al consultar el estado de la cuenta de un cliente la respuesta incluirá el saldo en pesos como conjunto de todas sus cuentas. Lo mismo para ña funcion "get_total_usd".
