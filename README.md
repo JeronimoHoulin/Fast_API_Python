@@ -1,32 +1,32 @@
-# Banza-Challenge
-### Examen técnico.
+# FAST API (Python REST API library).
+## Bank / Fintech Backend API simulation. 
 
-Este repositorio contiene una API REST escrita en Python 3.
+This repository contains a REST API written in Python 3.
 
-Utilizando FastAPI y el paquete Uvicorn se generó la applicación vía la cual un cliente podrá hacer consultas, transferencias y modificaciones.
+Using FastAPI and the Uvicorn package, an application was generated through which a client can make queries, transfers, and modifications.
 
-**Para correr la aplicación localmente, después de haber cloneado el repositorio en un Entorno Virtual de Python3 vacío, se deberá correr: "cd Banza-Challenge" y "pip install -r requirments.txt"**
+To run the application locally, after cloning the repository into an empty Python3 Virtual Environment, run: "cd Banza-Challenge" and "pip install -r requirements.txt"
 
-Uvicorn corre el cliente localmente desde el "localhost:8000" utilizando el comando: "uvicorn app:app --reload"
+Uvicorn runs the client locally from "localhost:8000" using the command: "uvicorn app:app --reload"
 
-Con el paquete de SQL Alchemy podrán conectarse estas peticiones del cliente con nuestra base de datos relacionales (MySQL) y ejecutar ordenes de tipo put, get, post y delete ó CRUD. 
+The SQL Alchemy package connects these client requests to our relational database (MySQL) and executes CRUD operations such as put, get, post, and delete.
 
-**Para conetar la applicación con una base de datos MySQL propia deberás renombrar el archivo ".envEXAMPLE" a ".env" y proporcionar tu usuario y contraseña (si no tienes un nombre de usuario especiífico el default es "root")**
+To connect the application to your own MySQL database, you should rename the ".envEXAMPLE" file to ".env" and provide your username and password (if you don't have a specific username, the default is "root").
 
-La base de datos que se generará se llama "storedb", podrás verla con el comando "SHOW databases;" desde MySQL (CLI ó GUI).
+The generated database is named "storedb," and you can view it with the command "SHOW databases;" from MySQL (CLI or GUI).
 
-Toda la documentación está explícita en: "localhost:8000/docs", en donde se implementaron los tests para validar todos los endpoints. Debajo un video demostrando las primeras trés acciones que deben crearse para generar Usuarios, Cuentas y movimientos:
+All documentation is available at: "localhost:8000/docs," where tests have been implemented to validate all endpoints. Below is a video demonstrating the first three actions that must be taken to generate Users, Accounts, and transactions:
 
 https://user-images.githubusercontent.com/79488175/180074800-e5bb473a-fe94-49cd-8ca5-bdf5f64f3694.mp4
 
-La applicación está organizada de la siguiente manera:
-*Crear un usuario,
-*Crear diferentes cuentas para cada usuario, estas se diferencian con el nombre de la categoría (ej: Usuario X puede tener cuenta #1: "Gold", Cuenta #2: "Silver", Cuenta #3: "Platinum"... etc. pero no puede tener dos cuentas de categoría "Platinum").
+The application is organized as follows:
 
-Únicamente los endponts que terminan en "{id}" requieren ingresar el id del cliente creado, no es necesario ingresar el campo "id" para los demás ya que se generan automaticamente en la base de datos relacional con la lógica de la función "Increment".
+Create a user,
+Create different accounts for each user, distinguished by category names (e.g., User X can have account #1: "Gold," Account #2: "Silver," Account #3: "Platinum," etc., but cannot have two accounts of the "Platinum" category).
+Only endpoints ending in "{id}" require entering the created client's id; it is not necessary to enter the "id" field for the others as they are generated automatically in the relational database with the logic of the "Increment" function.
 
-Notar la diferencia entre el "Schema" de un movimiento y el "Modelo" del mismo ya que el primero refiere a la estructura que debe ingresar el cliente y el segundo la que se registra en la base de datos. Al crear un nuevo movimiento se requiere el id del usuario en cuestion, y el nombre de la categoria de la cuenta, MySQL almacenará este movimiento en su respectiva cuenta mientas que le id del movimiento se genera automaticamente.
+Note the difference between the "Schema" of a movement and its "Model," as the former refers to the structure that the client must enter, and the latter is what is recorded in the database. When creating a new movement, the id of the user in question and the name of the account category are required; MySQL will store this movement in its respective account, while the movement id is generated automatically.
 
-Finalmente se debe apreciar aunque cada cliente puede tener diferentes cuentas, y estas pueden ser consultadas individualmente, al consultar el estado de la cuenta de un cliente la respuesta incluirá el saldo en pesos como conjunto de todas sus cuentas. Lo mismo para ña funcion "get_total_usd". Esta estructura hará que los movimientos y las cuentas se registren en tablas separadas y que, al borrar una cuenta, sigan existiendo los movimientos de cada usuario. 
+Finally, although each client can have different accounts, and these can be queried individually, when checking the status of a client's account, the response will include the balance in pesos as the sum of all their accounts. The same applies to the "get_total_usd" function. This structure ensures that movements and accounts are recorded in separate tables, and when deleting an account, the movements of each user will still exist.
 
-*Al borrar una cuenta, existe una lógica de validar si es la única cuenta del cliente, ó este tiene otras cuentas en nuestra base de datos donde podría enviar los fondos. NO existe la lógica que ejecute esta transferencia de fondos de una cuenta a otra... podrá ser agregada en un futuro.
+*When deleting an account, there is logic to validate if it is the only account for the client or if the client has other accounts in our database where funds could be transferred. There is currently no logic to execute this fund transfer from one account to another, but it may be added in the future.
